@@ -1,0 +1,6 @@
+@jwm_photography_api_HostAddress = http://localhost:5099
+
+GET {{jwm_photography_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

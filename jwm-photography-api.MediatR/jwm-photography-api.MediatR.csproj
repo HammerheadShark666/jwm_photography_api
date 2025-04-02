@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>jwm_photography_api.MediatR</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\jwm-photography-api.Data\jwm-photography-api.Data.csproj" />
+    <ProjectReference Include="..\jwm_photography_api.Domain\jwm_photography_api.Domain.csproj" />
+    <ProjectReference Include="..\jwm_photography_api.Helper\jwm_photography_api.Helper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Favourite\GetFavouritePhotos\" />
+    <Folder Include="Favourite\GetFavouritePhoto\" />
+    <Folder Include="Favourite\AddFavouritePhoto\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>jwm_photography_api</RootNamespace>
+    <UserSecretsId>5cb33847-80ce-41c5-bf8a-ee0afa5413c6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\**" />
+    <Compile Remove="Domain\**" />
+    <Compile Remove="Helpers\**" />
+    <Compile Remove="Mediatr\**" />
+    <Compile Remove="Service\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="Domain\**" />
+    <Content Remove="Helpers\**" />
+    <Content Remove="Mediatr\**" />
+    <Content Remove="Service\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Domain\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <EmbeddedResource Remove="Mediatr\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Data\**" />
+    <None Remove="Domain\**" />
+    <None Remove="Helpers\**" />
+    <None Remove="Mediatr\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="8.1.8" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\jwm-photography-api.Data\jwm-photography-api.Data.csproj" />
+    <ProjectReference Include="..\jwm-photography-api.MediatR\jwm-photography-api.MediatR.csproj" />
+    <ProjectReference Include="..\jwm_photography_api.Domain\jwm_photography_api.Domain.csproj" />
+    <ProjectReference Include="..\jwm_photography_api.Helper\jwm_photography_api.Helper.csproj" />
+  </ItemGroup>
+
+</Project>
