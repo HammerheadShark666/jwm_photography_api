@@ -9,11 +9,11 @@ using jwm_photography_api.Data.Contexts;
 
 #nullable disable
 
-namespace jwm_photography_api.Migrations
+namespace jwm_photography_api.Data.Migrations
 {
     [DbContext(typeof(JwmPhotographyApiDbContext))]
-    [Migration("20250401082248_create-account-refreshtoken-tables")]
-    partial class createaccountrefreshtokentables
+    [Migration("20250403140115_create-jwm-photo-tables")]
+    partial class createjwmphototables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,61 +27,72 @@ namespace jwm_photography_api.Migrations
 
             modelBuilder.Entity("jwm_photography_api.Domain.Account", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AcceptTerms")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<bool>("IsAuthenticated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bit")
+                        .HasComputedColumnSql("CAST(CASE WHEN Verified IS NOT NULL OR PasswordReset IS NOT NULL THEN 1 ELSE 0 END AS bit)", true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("PasswordReset")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(7)");
 
                     b.Property<string>("ResetToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("ResetTokenExpires")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(7)");
 
-                    b.Property<int?>("Role")
+                    b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(7)");
 
                     b.Property<string>("VerificationToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("Verified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(7)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PHOTO_Account");
+                    b.ToTable("JWM_PHOTO_Account");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Category", b =>
@@ -94,11 +105,12 @@ namespace jwm_photography_api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PHOTO_Category");
+                    b.ToTable("JWM_PHOTO_Category");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Country", b =>
@@ -111,26 +123,27 @@ namespace jwm_photography_api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PHOTO_Country");
+                    b.ToTable("JWM_PHOTO_Country");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Favourite", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("AccountId")
                         .HasColumnType("UNIQUEIDENTIFIER");
 
-                    b.Property<long>("PhotoId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PhotoId")
+                        .HasColumnType("int");
 
-                    b.HasKey("UserId", "PhotoId");
+                    b.HasKey("AccountId", "PhotoId");
 
                     b.HasIndex("PhotoId");
 
-                    b.ToTable("PHOTO_Favourite");
+                    b.ToTable("JWM_PHOTO_Favourite");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Gallery", b =>
@@ -142,41 +155,35 @@ namespace jwm_photography_api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PHOTO_Gallery");
+                    b.ToTable("JWM_PHOTO_Gallery");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.GalleryPhoto", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("GalleryId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Order")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("PhotoId")
+                        .HasColumnType("int");
 
-                    b.Property<long>("PhotoId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GalleryId");
+                    b.HasKey("GalleryId", "PhotoId");
 
                     b.HasIndex("PhotoId");
 
-                    b.ToTable("PHOTO_GalleryPhoto");
+                    b.ToTable("JWM_PHOTO_GalleryPhoto");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Palette", b =>
@@ -189,25 +196,28 @@ namespace jwm_photography_api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PHOTO_Palette");
+                    b.ToTable("JWM_PHOTO_Palette");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Photo", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApertureValue")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Camera")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("CategoryId")
@@ -220,16 +230,19 @@ namespace jwm_photography_api.Migrations
                         .HasColumnType("datetime2(7)");
 
                     b.Property<string>("ExposureProgram")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ExposureTime")
-                        .HasColumnType("nvarchar(25)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FileName")
                         .IsRequired()
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("FocalLength")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<int?>("Height")
@@ -239,19 +252,23 @@ namespace jwm_photography_api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Lens")
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<byte?>("Orientation")
-                        .HasColumnType("tinyint");
+                    b.Property<int?>("Orientation")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PaletteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("UseInMontage")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("Width")
                         .HasColumnType("int");
@@ -264,7 +281,7 @@ namespace jwm_photography_api.Migrations
 
                     b.HasIndex("PaletteId");
 
-                    b.ToTable("PHOTO_Photo");
+                    b.ToTable("JWM_PHOTO_Photo");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.RefreshToken", b =>
@@ -275,39 +292,86 @@ namespace jwm_photography_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedByIp")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(7)");
 
-                    b.Property<string>("ReplacedByToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Revoked")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RevokedByIp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsExpired")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bit")
+                        .HasComputedColumnSql("CAST(CASE WHEN GETDATE() >= Expires THEN 1 ELSE 0 END AS bit)");
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("PHOTO_RefreshToken");
+                    b.ToTable("JWM_PHOTO_RefreshToken");
+                });
+
+            modelBuilder.Entity("jwm_photography_api.Domain.UserGallery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JWM_PHOTO_UserGallery");
+                });
+
+            modelBuilder.Entity("jwm_photography_api.Domain.UserGalleryPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserGalleryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhotoId");
+
+                    b.HasIndex("UserGalleryId");
+
+                    b.ToTable("JWM_PHOTO_UserGalleryPhoto");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.Favourite", b =>
@@ -323,7 +387,7 @@ namespace jwm_photography_api.Migrations
 
             modelBuilder.Entity("jwm_photography_api.Domain.GalleryPhoto", b =>
                 {
-                    b.HasOne("jwm_photography_api.Domain.Gallery", null)
+                    b.HasOne("jwm_photography_api.Domain.Gallery", "Gallery")
                         .WithMany("Photos")
                         .HasForeignKey("GalleryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,6 +398,8 @@ namespace jwm_photography_api.Migrations
                         .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Gallery");
 
                     b.Navigation("Photo");
                 });
@@ -370,6 +436,25 @@ namespace jwm_photography_api.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("jwm_photography_api.Domain.UserGalleryPhoto", b =>
+                {
+                    b.HasOne("jwm_photography_api.Domain.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("jwm_photography_api.Domain.UserGallery", "UserGallery")
+                        .WithMany("Photos")
+                        .HasForeignKey("UserGalleryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+
+                    b.Navigation("UserGallery");
+                });
+
             modelBuilder.Entity("jwm_photography_api.Domain.Account", b =>
                 {
                     b.Navigation("RefreshTokens");
@@ -383,6 +468,11 @@ namespace jwm_photography_api.Migrations
             modelBuilder.Entity("jwm_photography_api.Domain.Photo", b =>
                 {
                     b.Navigation("Favourites");
+                });
+
+            modelBuilder.Entity("jwm_photography_api.Domain.UserGallery", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

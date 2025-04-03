@@ -3,7 +3,7 @@ using static jwm_photography_api.Domain.Helper.Enums;
 
 namespace jwm_photography_api.Domain;
 
-[Table("PHOTO_Account")]
+[Table("JWM_PHOTO_Account")]
 public class Account
 {
     public Guid Id { get; set; }
@@ -16,7 +16,7 @@ public class Account
     public Role? Role { get; set; }
     public string? VerificationToken { get; set; } = string.Empty;
     public DateTime? Verified { get; set; }
-    public bool IsAuthenticated => Verified.HasValue || PasswordReset.HasValue;
+    public bool IsAuthenticated { get; private set; }
     public string? ResetToken { get; set; } = string.Empty;
     public DateTime? ResetTokenExpires { get; set; }
     public DateTime? PasswordReset { get; set; }

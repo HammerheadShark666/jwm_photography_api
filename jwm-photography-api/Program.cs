@@ -2,7 +2,6 @@ using jwm_photography_api.Endpoints;
 using jwm_photography_api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var environment = builder.Environment;
 
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

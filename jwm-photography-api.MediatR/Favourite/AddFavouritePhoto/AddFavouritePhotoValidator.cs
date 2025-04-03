@@ -18,16 +18,16 @@ public class AddFavouritePhotoValidator : AbstractValidator<AddFavouritePhotoReq
         RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
         {
             return await PhotoExists(AddFavouritePhotoRequest.PhotoId);
-        }).WithMessage("Account not found.");
-
-        RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
-        {
-            return await AccountExists(AddFavouritePhotoRequest.UserId);
         }).WithMessage("Photo not found.");
 
         RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
         {
-            return await PhotoAlreadyFavourite(AddFavouritePhotoRequest.UserId, AddFavouritePhotoRequest.PhotoId);
+            return await AccountExists(AddFavouritePhotoRequest.AccountId);
+        }).WithMessage("Account not found.");
+
+        RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
+        {
+            return await PhotoAlreadyFavourite(AddFavouritePhotoRequest.AccountId, AddFavouritePhotoRequest.PhotoId);
         }).WithMessage("Photo already a favourite.");
     }
 

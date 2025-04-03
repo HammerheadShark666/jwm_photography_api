@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using FluentValidation;
 using jwm_photography_api.Extensions;
+using jwm_photography_api.Helper;
 using jwm_photography_api.Helpers.Exceptions;
 using jwm_photography_api.MediatR.Favourite.AddFavouritePhoto;
 using jwm_photography_api.MediatR.Favourite.DeleteFavouritePhoto;
@@ -20,14 +21,7 @@ public static class EndpointsFavourite
 
         favouriteGroup.MapGet("", async ([FromServices] IMediator mediator, HttpContext httpContext) =>
         {
-            var accountId = httpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            if (accountId == null)
-            {
-                throw new BadRequestException("Account Id not found.");
-            }
-
-            var favouritesPhotos = await mediator.Send(new GetFavouritePhotosRequest(new Guid(accountId)));
+            var favouritesPhotos = await mediator.Send(new GetFavouritePhotosRequest(AuthenticationHelper.GetAccountId(httpContext)));
             return Results.Ok(favouritesPhotos.FavouritePhotos);
         })
         .Produces<GetFavouritePhotosResponse>((int)HttpStatusCode.OK)
@@ -44,9 +38,9 @@ public static class EndpointsFavourite
             Tags = [new() { Name = "JWM Photography - Get favourite photos for the user." }]
         });
 
-        favouriteGroup.MapPost("/add", async ([FromBody] AddFavouritePhotoRequest addFavouritePhotoRequest, IMediator mediator) =>
+        favouriteGroup.MapPost("/add/{PhotoId}", async ([FromRoute] int photoId, IMediator mediator, HttpContext httpContext) =>
         {
-            var addFavouritePhotoResponse = await mediator.Send(addFavouritePhotoRequest);
+            var addFavouritePhotoResponse = await mediator.Send(new AddFavouritePhotoRequest(AuthenticationHelper.GetAccountId(httpContext), photoId));
             return Results.Ok(addFavouritePhotoResponse);
         })
         .Accepts<AddFavouritePhotoRequest>("application/json")
@@ -65,9 +59,9 @@ public static class EndpointsFavourite
             Tags = [new() { Name = "JWM Photography - Add Favourite Photo" }]
         });
 
-        favouriteGroup.MapDelete("", async ([FromBody] DeleteFavouritePhotoRequest deleteFavouritePhotoRequest, IMediator mediator) =>
+        favouriteGroup.MapDelete("/{PhotoId}", async ([FromRoute] int photoId, IMediator mediator, HttpContext httpContext) =>
         {
-            var deleteFavouritePhotoResponse = await mediator.Send(deleteFavouritePhotoRequest);
+            var deleteFavouritePhotoResponse = await mediator.Send(new DeleteFavouritePhotoRequest(AuthenticationHelper.GetAccountId(httpContext), photoId));
             return Results.Ok(deleteFavouritePhotoResponse);
         })
         .Accepts<DeleteFavouritePhotoRequest>("application/json")
