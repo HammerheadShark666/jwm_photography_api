@@ -38,10 +38,7 @@ public static class AppExtensions
 
     public static void ConfigureMiddleware(this WebApplication webApplication)
     {
-        //if (!webApplication.Environment.IsDevelopment())
-        //{
         webApplication.UseMiddleware<ExceptionHandlingMiddleware>();
-        //}
     }
 
     //public static void ConfigureCors(this WebApplication webApplication)

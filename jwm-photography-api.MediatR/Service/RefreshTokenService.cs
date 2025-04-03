@@ -28,7 +28,7 @@ public class RefreshTokenService(IMapper mapper,
     public RefreshToken GenerateRefreshToken(string ipAddress, Account account)
     {
         var refreshTokenExpires = DateTime.Now.AddDays(EnvironmentVariables.JwtSettingsRefreshTokenExpiryDays);
-        var refreshToken = AuthenticationHelper.GenerateRefreshToken(ipAddress, refreshTokenExpires);
+        var refreshToken = AuthenticationHelper.GenerateRefreshToken(ipAddress, refreshTokenExpires, account);
         refreshToken.Account = account;
 
         return refreshToken;
@@ -36,12 +36,7 @@ public class RefreshTokenService(IMapper mapper,
 
     public async Task<RefreshToken> GetRefreshTokenAsync(string token)
     {
-        var refreshToken = await _unitOfWork.RefreshTokens.ByTokenAsync(token);
-        if (refreshToken == null || !refreshToken.IsActive)
-        {
-            throw new AppException(ConstantMessages.InvalidToken);
-        }
-
+        var refreshToken = await _unitOfWork.RefreshTokens.ByTokenAsync(token) ?? throw new AppException(ConstantMessages.InvalidToken);
         return refreshToken;
     }
 }

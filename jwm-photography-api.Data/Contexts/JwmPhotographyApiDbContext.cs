@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Jwm Api
 
+using jwm_photography_api.Data.Contexts.ModelBuilders;
 using jwm_photography_api.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,16 @@ public class JwmPhotographyApiDbContext(DbContextOptions<JwmPhotographyApiDbCont
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.UserId, fv.PhotoId });
+        CountryModelBuilder.Build(modelBuilder);
+        CategoryModelBuilder.Build(modelBuilder);
+        PaletteModelBuilder.Build(modelBuilder);
+        AccountModelBuilder.Build(modelBuilder);
+        FavouriteModelBuilder.Build(modelBuilder);
+        GalleryModelBuilder.Build(modelBuilder);
+        GalleryPhotosModelBuilder.Build(modelBuilder);
+        PhotoModelBuilder.Build(modelBuilder);
+        RefreshTokenModelBuilder.Build(modelBuilder);
+        UserGalleryModelBuilder.Build(modelBuilder);
+        UserGalleryPhotosModelBuilder.Build(modelBuilder);
     }
 }

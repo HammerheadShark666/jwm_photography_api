@@ -12,7 +12,7 @@ public class GetGalleriesQueryHandler(IUnitOfWork unitOfWork,
 {
     public async Task<GetFavouritePhotosResponse> Handle(GetFavouritePhotosRequest getFavouritePhotosRequest, CancellationToken cancellationToken)
     {
-        var favourites = await unitOfWork.Favourites.GetFavouritePhotosAsync(getFavouritePhotosRequest.UserId);
+        var favourites = await unitOfWork.Favourites.GetFavouritePhotosAsync(getFavouritePhotosRequest.AccountId);
         if (favourites.Count == 0)
         {
             logger.LogError("Favourites not found.");

@@ -9,11 +9,11 @@ public class JwmPhotographyApiDbContextFactory : IDesignTimeDbContextFactory<Jwm
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory()) // Ensure correct directory
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<JwmPhotographyApiDbContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("SQLAZURECONNSTR_JWM_PHOTOGRAPHY"));
 
         return new JwmPhotographyApiDbContext(optionsBuilder.Options);
     }

@@ -2,4 +2,4 @@
 
 namespace jwm_photography_api.MediatR.Favourite.GetFavouritePhotos;
 
-public record GetFavouritePhotosRequest(Guid UserId) : IRequest<GetFavouritePhotosResponse>;
+public record GetFavouritePhotosRequest(Guid AccountId) : IRequest<GetFavouritePhotosResponse>;

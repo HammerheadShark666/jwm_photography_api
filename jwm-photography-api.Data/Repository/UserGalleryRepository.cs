@@ -14,35 +14,35 @@ public class UserGalleryRepository(JwmPhotographyApiDbContext context) : IUserGa
 
     public async Task<List<UserGallery>> AllSortedAsync(Guid userId)
     {
-        return await context.UserGalleries.Where(userGallery => userGallery.UserId == userId).OrderBy(userGallery => userGallery.Name).ToListAsync();
+        return await context.UserGalleries.Where(userGallery => userGallery.AccountId == userId).OrderBy(userGallery => userGallery.Name).ToListAsync();
     }
 
     public async Task<UserGallery?> GetAsync(Guid userId, long galleryId)
     {
-        return await context.UserGalleries.Where(userGallery => userGallery.UserId == userId && userGallery.Id == galleryId).SingleOrDefaultAsync();
+        return await context.UserGalleries.Where(userGallery => userGallery.AccountId == userId && userGallery.Id == galleryId).SingleOrDefaultAsync();
     }
 
-    public async Task<bool> ExistsAsync(Guid userId, string name)
+    public async Task<bool> ExistsAsync(Guid accountId, string name)
     {
         return await context.UserGalleries
-                                .Where(userGallery => userGallery.UserId == userId && userGallery.Name.Equals(name)).AnyAsync();
+                                .Where(userGallery => userGallery.AccountId == accountId && userGallery.Name.Equals(name)).AnyAsync();
     }
 
-    public async Task<bool> ExistsAsync(Guid userId, long id, string name)
+    public async Task<bool> ExistsAsync(Guid accountId, long id, string name)
     {
         return await context.UserGalleries
                                .Where(userGallery => userGallery.Name.Equals(name)
-                                    && !userGallery.Id.Equals(id) && userGallery.UserId == userId)
+                                    && !userGallery.Id.Equals(id) && userGallery.AccountId == accountId)
                                .AnyAsync();
     }
 
-    public async Task<UserGallery?> GetFullGalleryAsync(Guid userId, long id)
+    public async Task<UserGallery?> GetFullGalleryAsync(Guid accountId, long id)
     {
         return await context.UserGalleries
                                 .Include(userGallery => userGallery.Photos)
                                 .ThenInclude(photos => photos.Photo)
                                     .ThenInclude(photo => photo!.Country)
-                                .SingleOrDefaultAsync(userGallery => userGallery.UserId == userId && userGallery.Id == id);
+                                .SingleOrDefaultAsync(userGallery => userGallery.AccountId == accountId && userGallery.Id == id);
     }
 
     public async Task AddAsync(UserGallery gallery)

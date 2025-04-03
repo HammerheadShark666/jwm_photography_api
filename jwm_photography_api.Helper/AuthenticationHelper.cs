@@ -1,4 +1,7 @@
-﻿using jwm_photography_api.Domain;
+﻿// Ignore Spelling: Jwt
+
+using jwm_photography_api.Domain;
+using jwm_photography_api.Helpers.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,7 +40,7 @@ public class AuthenticationHelper
                                                    .Replace("/", "X");
     }
 
-    public static RefreshToken GenerateRefreshToken(string ipAddress, DateTime expires)
+    public static RefreshToken GenerateRefreshToken(string ipAddress, DateTime expires, Account account)
     {
         return new RefreshToken
         {
@@ -45,7 +48,8 @@ public class AuthenticationHelper
             Expires = expires,
             Created = DateTime.Now,
             CreatedByIp = ipAddress,
-            Account = new Account()
+            AccountId = account.Id,
+            Account = account
         };
     }
 
@@ -68,5 +72,11 @@ public class AuthenticationHelper
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public static Guid GetAccountId(HttpContext httpContext)
+    {
+        var accountId = (httpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) ?? throw new BadRequestException("Account Id not found.");
+        return new Guid(accountId);
     }
 }

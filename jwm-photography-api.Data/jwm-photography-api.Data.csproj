@@ -25,4 +25,8 @@
     <ProjectReference Include="..\jwm_photography_api.Helper\jwm_photography_api.Helper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
