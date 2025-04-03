@@ -36,6 +36,13 @@ public class UserGalleryRepository(JwmPhotographyApiDbContext context) : IUserGa
                                .AnyAsync();
     }
 
+    public async Task<bool> ExistsAsync(Guid accountId, long id)
+    {
+        return await context.UserGalleries
+                               .Where(userGallery => !userGallery.Id.Equals(id) && userGallery.AccountId == accountId)
+                               .AnyAsync();
+    }
+
     public async Task<UserGallery?> GetFullGalleryAsync(Guid accountId, long id)
     {
         return await context.UserGalleries

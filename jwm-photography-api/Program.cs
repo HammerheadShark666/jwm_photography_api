@@ -39,5 +39,6 @@ EndpointsPalette.ConfigureRoutes(app);
 EndpointsGallery.ConfigureRoutes(app);
 EndpointsPhoto.ConfigureRoutes(app);
 EndpointsFavourite.ConfigureRoutes(app);
+EndpointsUserGallery.ConfigureRoutes(app);
 
 app.Run();
