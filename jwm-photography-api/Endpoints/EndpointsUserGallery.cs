@@ -7,6 +7,7 @@ using jwm_photography_api.MediatR.UserGallery.AddUserGallery;
 using jwm_photography_api.MediatR.UserGallery.DeleteUserGallery;
 using jwm_photography_api.MediatR.UserGallery.GetUserGalleries;
 using jwm_photography_api.MediatR.UserGallery.GetUserGallery;
+using jwm_photography_api.MediatR.UserGallery.UpdateUserGallery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -102,7 +103,26 @@ public static class EndpointsUserGallery
         });
 
 
-        //Update User Gallery
+        userGalleryGroup.MapPut("/update", async ([FromBody] UpdateUserGalleryRequest updateUserGalleryRequest, IMediator mediator, HttpContext httpContext) =>
+        {
+            var addUserGalleryResponse = await mediator.Send(new UpdateUserGalleryRequest(AuthenticationHelper.GetAccountId(httpContext), updateUserGalleryRequest.GalleryId, updateUserGalleryRequest.Name, updateUserGalleryRequest.Description));
+            return Results.Ok(addUserGalleryResponse);
+        })
+        .Accepts<UpdateUserGalleryRequest>("application/json")
+        .Produces<UpdateUserGalleryResponse>((int)HttpStatusCode.OK)
+        .Produces<BadRequestException>((int)HttpStatusCode.BadRequest)
+        .Produces<ValidationException>((int)HttpStatusCode.BadRequest)
+        .Produces<ArgumentException>((int)HttpStatusCode.BadRequest)
+        .WithName("Update User Gallery")
+        .WithApiVersionSet(webApplication.GetApiVersionSet())
+        .MapToApiVersion(new ApiVersion(1, 0))
+        .RequireAuthorization()
+        .WithOpenApi(x => new OpenApiOperation(x)
+        {
+            Summary = "Update User Gallery.",
+            Description = "Update User Gallery.",
+            Tags = [new() { Name = "JWM Photography - Update User Gallery" }]
+        });
 
 
         //Add Photo to User Gallery
