@@ -68,15 +68,15 @@ public static class EndpointsUserGallery
         .Produces<BadRequestException>((int)HttpStatusCode.BadRequest)
         .Produces<ValidationException>((int)HttpStatusCode.BadRequest)
         .Produces<ArgumentException>((int)HttpStatusCode.BadRequest)
-        .WithName("Add Favourite Photo")
+        .WithName("Add User Gallery")
         .WithApiVersionSet(webApplication.GetApiVersionSet())
         .MapToApiVersion(new ApiVersion(1, 0))
         .RequireAuthorization()
         .WithOpenApi(x => new OpenApiOperation(x)
         {
-            Summary = "Add Favourite Photo.",
-            Description = "Add Favourite Photo.",
-            Tags = [new() { Name = "JWM Photography - Add Favourite Photo" }]
+            Summary = "Add User Gallery.",
+            Description = "Add User Gallery.",
+            Tags = [new() { Name = "JWM Photography - Add User Gallery" }]
         });
 
 

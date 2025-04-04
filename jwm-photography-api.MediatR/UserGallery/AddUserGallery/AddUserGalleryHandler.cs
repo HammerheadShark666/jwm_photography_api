@@ -14,6 +14,6 @@ public class AddUserGalleryCommandHandler(IUnitOfWork unitOfWork,
         await unitOfWork.UserGalleries.AddAsync(userGallery);
         await unitOfWork.Complete();
 
-        return new AddUserGalleryResponse();
+        return mapper.Map<AddUserGalleryResponse>(userGallery);
     }
 }

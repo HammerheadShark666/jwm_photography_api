@@ -7,5 +7,7 @@ public class AddUserGalleryMapper : Profile
     public AddUserGalleryMapper()
     {
         base.CreateMap<AddUserGalleryRequest, Domain.UserGallery>();
+
+        base.CreateMap<Domain.UserGallery, AddUserGalleryResponse>();
     }
 }

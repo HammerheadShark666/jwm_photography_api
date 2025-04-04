@@ -13,34 +13,21 @@ public class AddUserGalleryValidator : AbstractValidator<AddUserGalleryRequest>
         _accountRepository = accountRepository;
         _userGalleryRepository = userGalleryRepository;
 
-        //RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
-        //{
-        //    return await PhotoExists(AddFavouritePhotoRequest.PhotoId);
-        //}).WithMessage("Photo not found.");
+        RuleFor(AddUserGalleryRequest => AddUserGalleryRequest.Name)
+                .NotEmpty().WithMessage("Name is required.")
+                .Length(1, 150).WithMessage("Name length between 1 and 150.");
 
-        //RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
-        //{
-        //    return await AccountExists(AddFavouritePhotoRequest.AccountId);
-        //}).WithMessage("Account not found.");
+        RuleFor(AddUserGalleryRequest => AddUserGalleryRequest.Description)
+                .Length(0, 1000).WithMessage("Description length between 0 and 1000.");
 
-        //RuleFor(AddFavouritePhotoRequest => AddFavouritePhotoRequest).MustAsync(async (AddFavouritePhotoRequest, cancellation) =>
-        //{
-        //    return await PhotoAlreadyFavourite(AddFavouritePhotoRequest.AccountId, AddFavouritePhotoRequest.PhotoId);
-        //}).WithMessage("Photo already a favourite.");
+        RuleFor(AddUserGalleryRequest => AddUserGalleryRequest).MustAsync(async (AddUserGalleryRequest, cancellation) =>
+        {
+            return await AccountExists(AddUserGalleryRequest.AccountId);
+        }).WithMessage("Account not found.");
     }
 
     protected async Task<bool> AccountExists(Guid id)
     {
         return await _accountRepository.ExistsAsync(id);
     }
-
-    //protected async Task<bool> PhotoExists(int id)
-    //{
-    //    return await _photoRepository.ExistsAsync(id);
-    //}
-
-    //protected async Task<bool> PhotoAlreadyFavourite(Guid userId, int photoId)
-    //{
-    //    return await _favouriteRepository.ExistsAsync(userId, photoId);
-    //}
 }
