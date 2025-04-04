@@ -9,6 +9,7 @@ public interface IUserGalleryRepository
     Task<UserGallery?> GetAsync(Guid userId, long galleryId);
     Task<bool> ExistsAsync(Guid userId, string name);
     Task<bool> ExistsAsync(Guid userId, long id, string name);
+    Task<bool> ExistsAsync(Guid accountId, long id);
     Task<UserGallery?> GetFullGalleryAsync(Guid userId, long id);
     Task AddAsync(UserGallery gallery);
     void Update(UserGallery userGallery);
