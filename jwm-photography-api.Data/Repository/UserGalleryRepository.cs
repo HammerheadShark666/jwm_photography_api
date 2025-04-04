@@ -25,7 +25,7 @@ public class UserGalleryRepository(JwmPhotographyApiDbContext context) : IUserGa
     public async Task<bool> ExistsAsync(Guid accountId, string name)
     {
         return await context.UserGalleries
-                                .Where(userGallery => userGallery.AccountId == accountId && userGallery.Name.Equals(name)).AnyAsync();
+                                .Where(userGallery => userGallery.AccountId == accountId && userGallery.Name.ToUpper().Equals(name.ToUpper())).AnyAsync();
     }
 
     public async Task<bool> ExistsAsync(Guid accountId, long id, string name)
@@ -39,7 +39,7 @@ public class UserGalleryRepository(JwmPhotographyApiDbContext context) : IUserGa
     public async Task<bool> ExistsAsync(Guid accountId, long id)
     {
         return await context.UserGalleries
-                               .Where(userGallery => !userGallery.Id.Equals(id) && userGallery.AccountId == accountId)
+                               .Where(userGallery => userGallery.Id.Equals(id) && userGallery.AccountId == accountId)
                                .AnyAsync();
     }
 
