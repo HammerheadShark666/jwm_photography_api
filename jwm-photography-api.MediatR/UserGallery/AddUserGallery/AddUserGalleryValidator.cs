@@ -24,10 +24,20 @@ public class AddUserGalleryValidator : AbstractValidator<AddUserGalleryRequest>
         {
             return await AccountExists(AddUserGalleryRequest.AccountId);
         }).WithMessage("Account not found.");
+
+        RuleFor(AddUserGalleryRequest => AddUserGalleryRequest).MustAsync(async (AddUserGalleryRequest, cancellation) =>
+        {
+            return await GalleryNameExists(AddUserGalleryRequest.AccountId, AddUserGalleryRequest.Name);
+        }).WithMessage("User gallery name already exists.");
     }
 
-    protected async Task<bool> AccountExists(Guid id)
+    protected async Task<bool> AccountExists(Guid accountId)
     {
-        return await _accountRepository.ExistsAsync(id);
+        return await _accountRepository.ExistsAsync(accountId);
+    }
+
+    protected async Task<bool> GalleryNameExists(Guid accountId, string name)
+    {
+        return !await _userGalleryRepository.ExistsAsync(accountId, name);
     }
 }
