@@ -6,12 +6,6 @@ public class UserGalleryPhotosModelBuilder
 {
     public static void Build(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<UserGalleryPhoto>()
-        //    .Property(p => p.Id)
-        //    .HasColumnType("int")
-        //    .IsRequired()
-        //    .ValueGeneratedOnAdd();
-
         modelBuilder.Entity<UserGalleryPhoto>()
             .Property(p => p.UserGalleryId)
             .HasColumnType("int")
