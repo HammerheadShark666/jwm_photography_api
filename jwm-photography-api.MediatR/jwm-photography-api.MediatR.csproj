@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UserGallery\AddPhotoToUserGallery\**" />
+    <EmbeddedResource Remove="UserGallery\AddPhotoToUserGallery\**" />
+    <None Remove="UserGallery\AddPhotoToUserGallery\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
@@ -25,7 +31,6 @@
     <Folder Include="Service\" />
     <Folder Include="UserGallery\AddUserGallery\" />
     <Folder Include="UserGallery\DeleteUserGallery\" />
-    <Folder Include="UserGallery\AddPhotoToUserGallery\" />
     <Folder Include="UserGallery\DeletePhotoFromUserGallery\" />
     <Folder Include="UserGallery\UpdateUserGallery\" />
   </ItemGroup>

@@ -49,7 +49,7 @@ public class PhotoRepository(JwmPhotographyApiDbContext context) : IPhotoReposit
                       select galleryPhoto).CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(int id)
+    public async Task<bool> ExistsAsync(long id)
     {
         return await context.Photos.AnyAsync(photo => photo.Id == id);
     }

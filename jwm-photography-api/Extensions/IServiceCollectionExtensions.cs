@@ -66,6 +66,7 @@ public static class IServiceCollectionExtensions
 
     public static void ConfigureDI(this IServiceCollection services)
     {
+        services.AddScoped<IUserGalleryPhotoRepository, UserGalleryPhotoRepository>();
         services.AddScoped<IUserGalleryRepository, UserGalleryRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IFavouriteRepository, FavouriteRepository>();
