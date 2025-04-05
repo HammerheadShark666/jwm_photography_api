@@ -9,8 +9,11 @@
 
   <ItemGroup>
     <Compile Remove="UserGallery\AddPhotoToUserGallery\**" />
+    <Compile Remove="UserGallery\DeletePhotoFromUserGallery\**" />
     <EmbeddedResource Remove="UserGallery\AddPhotoToUserGallery\**" />
+    <EmbeddedResource Remove="UserGallery\DeletePhotoFromUserGallery\**" />
     <None Remove="UserGallery\AddPhotoToUserGallery\**" />
+    <None Remove="UserGallery\DeletePhotoFromUserGallery\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +34,6 @@
     <Folder Include="Service\" />
     <Folder Include="UserGallery\AddUserGallery\" />
     <Folder Include="UserGallery\DeleteUserGallery\" />
-    <Folder Include="UserGallery\DeletePhotoFromUserGallery\" />
     <Folder Include="UserGallery\UpdateUserGallery\" />
   </ItemGroup>
 
