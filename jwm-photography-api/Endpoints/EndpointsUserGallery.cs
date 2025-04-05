@@ -6,6 +6,7 @@ using jwm_photography_api.Helpers.Exceptions;
 using jwm_photography_api.MediatR.UserGallery.AddUserGallery;
 using jwm_photography_api.MediatR.UserGallery.AddUserGalleryPhoto;
 using jwm_photography_api.MediatR.UserGallery.DeleteUserGallery;
+using jwm_photography_api.MediatR.UserGallery.DeleteUserGalleryPhoto;
 using jwm_photography_api.MediatR.UserGallery.GetUserGalleries;
 using jwm_photography_api.MediatR.UserGallery.GetUserGallery;
 using jwm_photography_api.MediatR.UserGallery.UpdateUserGallery;
@@ -148,6 +149,25 @@ public static class EndpointsUserGallery
             Tags = [new() { Name = "JWM Photography - Add User Gallery Photo" }]
         });
 
-        //Remove Photo from User Gallery
+        userGalleryGroup.MapDelete("/photo/{userGalleryId}/{PhotoId}", async ([FromRoute] int userGalleryId, [FromRoute] int photoId, IMediator mediator, HttpContext httpContext) =>
+        {
+            var deleteUserGalleryPhotoResponse = await mediator.Send(new DeleteUserGalleryPhotoRequest(AuthenticationHelper.GetAccountId(httpContext), userGalleryId, photoId));
+            return Results.Ok(deleteUserGalleryPhotoResponse);
+        })
+        .Accepts<DeleteUserGalleryPhotoRequest>("application/json")
+        .Produces<DeleteUserGalleryPhotoResponse>((int)HttpStatusCode.OK)
+        .Produces<BadRequestException>((int)HttpStatusCode.BadRequest)
+        .Produces<ValidationException>((int)HttpStatusCode.BadRequest)
+        .Produces<ArgumentException>((int)HttpStatusCode.BadRequest)
+        .WithName("Delete User Gallery Photo")
+        .WithApiVersionSet(webApplication.GetApiVersionSet())
+        .MapToApiVersion(new ApiVersion(1, 0))
+        .RequireAuthorization()
+        .WithOpenApi(x => new OpenApiOperation(x)
+        {
+            Summary = "Delete User Gallery Photo.",
+            Description = "Delete User Gallery Photo.",
+            Tags = [new() { Name = "JWM Photography - Delete User Gallery Photo" }]
+        });
     }
 }

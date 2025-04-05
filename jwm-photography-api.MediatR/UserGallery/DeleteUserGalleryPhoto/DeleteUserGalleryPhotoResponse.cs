@@ -1,0 +1,3 @@
+namespace jwm_photography_api.MediatR.UserGallery.DeleteUserGalleryPhoto;
+
+public record DeleteUserGalleryPhotoResponse();

@@ -26,6 +26,18 @@ public class UserGalleryPhotoRepository(JwmPhotographyApiDbContext context) : IU
                       select galleryPhoto).SingleOrDefaultAsync();
     }
 
+    public async Task<UserGalleryPhoto?> GetGalleryPhotoAsync(Guid accountId, long userGalleryId, long photoId)
+    {
+        return await (from galleryPhoto in context.UserGalleryPhotos
+                      join userGallery in context.UserGalleries
+                      on galleryPhoto.UserGalleryId equals userGallery.Id
+                      where
+                        userGallery.AccountId == accountId
+                            && galleryPhoto.PhotoId == photoId
+                            && galleryPhoto.UserGalleryId == userGalleryId
+                      select galleryPhoto).SingleOrDefaultAsync();
+    }
+
     public async Task<List<UserGalleryPhoto>> GetGalleryPhotosAfterOrderPositionAsync(long galleryId, long photoId, int order)
     {
         return await (from galleryPhotos in context.UserGalleryPhotos
@@ -84,5 +96,17 @@ public class UserGalleryPhotoRepository(JwmPhotographyApiDbContext context) : IU
                                .Where(userGalleryPhoto => userGalleryPhoto.UserGalleryId.Equals(userGalleryId)
                                                                             && userGalleryPhoto.PhotoId == photoId)
                                .AnyAsync();
+    }
+
+    public async Task<bool> ExistsAsync(Guid accountId, long userGalleryId, long photoId)
+    {
+        return await (from galleryPhoto in context.UserGalleryPhotos
+                      join userGallery in context.UserGalleries
+                      on galleryPhoto.UserGalleryId equals userGallery.Id
+                      where
+                        userGallery.AccountId == accountId
+                            && galleryPhoto.PhotoId == photoId
+                            && galleryPhoto.UserGalleryId == userGalleryId
+                      select galleryPhoto).AnyAsync();
     }
 }
