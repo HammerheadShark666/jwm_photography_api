@@ -7,15 +7,6 @@ public class UserGalleryPhotosModelBuilder
     public static void Build(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserGalleryPhoto>()
-            .HasKey(p => new { p.Id });
-
-        modelBuilder.Entity<UserGalleryPhoto>()
-            .Property(p => p.Id)
-            .HasColumnType("int")
-            .IsRequired()
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<UserGalleryPhoto>()
             .Property(p => p.UserGalleryId)
             .HasColumnType("int")
             .IsRequired();
@@ -31,8 +22,12 @@ public class UserGalleryPhotosModelBuilder
             .IsRequired();
 
         modelBuilder.Entity<UserGalleryPhoto>()
-            .HasOne(g => g.UserGallery)
-            .WithMany(g => g.Photos)
-            .HasForeignKey(g => g.UserGalleryId);
+            .HasOne(g => g.Photo)
+            .WithMany(g => g.UserGalleryPhotos)
+            .HasForeignKey(g => g.PhotoId);
+
+        modelBuilder.Entity<UserGalleryPhoto>()
+           .HasKey(p => new { p.UserGalleryId, p.PhotoId });
+
     }
 }

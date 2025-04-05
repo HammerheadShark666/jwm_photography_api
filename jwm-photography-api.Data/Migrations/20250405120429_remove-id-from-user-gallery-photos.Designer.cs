@@ -12,8 +12,8 @@ using jwm_photography_api.Data.Contexts;
 namespace jwm_photography_api.Data.Migrations
 {
     [DbContext(typeof(JwmPhotographyApiDbContext))]
-    [Migration("20250403140115_create-jwm-photo-tables")]
-    partial class createjwmphototables
+    [Migration("20250405120429_remove-id-from-user-gallery-photos")]
+    partial class removeidfromusergalleryphotos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -350,26 +350,18 @@ namespace jwm_photography_api.Data.Migrations
 
             modelBuilder.Entity("jwm_photography_api.Domain.UserGalleryPhoto", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Order")
+                    b.Property<int>("UserGalleryId")
                         .HasColumnType("int");
 
                     b.Property<int>("PhotoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserGalleryId")
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserGalleryId", "PhotoId");
 
                     b.HasIndex("PhotoId");
-
-                    b.HasIndex("UserGalleryId");
 
                     b.ToTable("JWM_PHOTO_UserGalleryPhoto");
                 });
@@ -439,7 +431,7 @@ namespace jwm_photography_api.Data.Migrations
             modelBuilder.Entity("jwm_photography_api.Domain.UserGalleryPhoto", b =>
                 {
                     b.HasOne("jwm_photography_api.Domain.Photo", "Photo")
-                        .WithMany()
+                        .WithMany("UserGalleryPhotos")
                         .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -468,6 +460,8 @@ namespace jwm_photography_api.Data.Migrations
             modelBuilder.Entity("jwm_photography_api.Domain.Photo", b =>
                 {
                     b.Navigation("Favourites");
+
+                    b.Navigation("UserGalleryPhotos");
                 });
 
             modelBuilder.Entity("jwm_photography_api.Domain.UserGallery", b =>

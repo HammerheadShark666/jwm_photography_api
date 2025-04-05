@@ -4,6 +4,7 @@ using jwm_photography_api.Extensions;
 using jwm_photography_api.Helper;
 using jwm_photography_api.Helpers.Exceptions;
 using jwm_photography_api.MediatR.UserGallery.AddUserGallery;
+using jwm_photography_api.MediatR.UserGallery.AddUserGalleryPhoto;
 using jwm_photography_api.MediatR.UserGallery.DeleteUserGallery;
 using jwm_photography_api.MediatR.UserGallery.GetUserGalleries;
 using jwm_photography_api.MediatR.UserGallery.GetUserGallery;
@@ -125,7 +126,27 @@ public static class EndpointsUserGallery
         });
 
 
-        //Add Photo to User Gallery
+        userGalleryGroup.MapPost("/add/photo", async ([FromBody] AddUserGalleryPhotoRequest addUserGalleryPhotoRequest, IMediator mediator, HttpContext httpContext) =>
+        {
+            var addUserGalleryPhotoRequestWithAccountId = addUserGalleryPhotoRequest with { AccountId = AuthenticationHelper.GetAccountId(httpContext) };
+            var addUserGalleryPhotoResponse = await mediator.Send(addUserGalleryPhotoRequestWithAccountId);
+            return Results.Ok(addUserGalleryPhotoResponse);
+        })
+        .Accepts<AddUserGalleryPhotoRequest>("application/json")
+        .Produces<AddUserGalleryPhotoResponse>((int)HttpStatusCode.OK)
+        .Produces<BadRequestException>((int)HttpStatusCode.BadRequest)
+        .Produces<ValidationException>((int)HttpStatusCode.BadRequest)
+        .Produces<ArgumentException>((int)HttpStatusCode.BadRequest)
+        .WithName("Add User Gallery Photo")
+        .WithApiVersionSet(webApplication.GetApiVersionSet())
+        .MapToApiVersion(new ApiVersion(1, 0))
+        .RequireAuthorization()
+        .WithOpenApi(x => new OpenApiOperation(x)
+        {
+            Summary = "Add User Gallery Photo.",
+            Description = "Add User Gallery Photo.",
+            Tags = [new() { Name = "JWM Photography - Add User Gallery Photo" }]
+        });
 
         //Remove Photo from User Gallery
     }

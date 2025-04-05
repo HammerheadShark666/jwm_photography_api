@@ -19,6 +19,6 @@ public class FavouriteModelBuilder
         modelBuilder.Entity<Domain.Favourite>()
            .HasOne(u => u.Photo);
 
-        modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.AccountId, fv.PhotoId });
+        modelBuilder.Entity<Favourite>().HasKey(f => new { f.AccountId, f.PhotoId });
     }
 }

@@ -77,4 +77,12 @@ public class UserGalleryPhotoRepository(JwmPhotographyApiDbContext context) : IU
     {
         context.UserGalleryPhotos.Remove(userGalleryPhoto);
     }
+
+    public async Task<bool> ExistsAsync(long userGalleryId, long photoId)
+    {
+        return await context.UserGalleryPhotos
+                               .Where(userGalleryPhoto => userGalleryPhoto.UserGalleryId.Equals(userGalleryId)
+                                                                            && userGalleryPhoto.PhotoId == photoId)
+                               .AnyAsync();
+    }
 }

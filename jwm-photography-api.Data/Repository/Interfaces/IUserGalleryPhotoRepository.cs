@@ -11,4 +11,5 @@ public interface IUserGalleryPhotoRepository
     Task<List<UserGalleryPhoto>> GetGalleryPhotosBeforeOrderPositionAsync(long galleryId, long photoId, int order);
     Task<UserGalleryPhoto> AddAsync(UserGalleryPhoto userGalleryPhoto);
     void Delete(UserGalleryPhoto userGalleryPhoto);
+    Task<bool> ExistsAsync(long userGalleryId, long photoId);
 }
